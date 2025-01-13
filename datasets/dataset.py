@@ -13,11 +13,11 @@ class LLdataset:
     def get_loaders(self):
         # Get train and test datasets directly from the directory (using 'Test' for validation)
         train_dataset = AllWeatherDataset(
-            os.path.join(self.config.data.data_dir, self.config.data.train_dataset, 'train'),
+            os.path.join(self.config.data.data_dir, self.config.data.train_dataset, 'Train'),
             patch_size=self.config.data.patch_size
         )
         test_dataset = AllWeatherDataset(
-            os.path.join(self.config.data.data_dir, self.config.data.val_dataset, 'test'),  # Changed from 'val' to 'test'
+            os.path.join(self.config.data.data_dir, self.config.data.val_dataset, 'Test'),  # Changed from 'val' to 'test'
             patch_size=self.config.data.patch_size,
             train=False
         )
