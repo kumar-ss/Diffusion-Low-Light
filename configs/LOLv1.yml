@@ -1,13 +1,13 @@
 data:
-    type: "LLdataset"
-    train_dataset: "LOLv1"
-    val_dataset: "LOLv1"
-    patch_size: 256
-    channels: 3
-    num_workers: 4
-    data_dir: "/content/drive/My Drive/LOLI/LOL-v1"
-    ckpt_dir: "ckpt/"
-    conditional: True
+  type: "LLdataset"
+  train_dataset: "Real_captured"  # Use the "Train" folder for training
+  val_dataset: "Real_captured"    # Use the "Test" folder for validation (as renamed)
+  patch_size: 256
+  channels: 3
+  num_workers: 4
+  data_dir: "/content/drive/My Drive/LOLI/LOL-v2"  # Path to your dataset directory
+  ckpt_dir: "ckpt/"
+  conditional: True
 
 model:
     in_channels: 3
