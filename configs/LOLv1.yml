@@ -1,7 +1,7 @@
 data:
     type: "LLdataset"
-    train_dataset: "LOLv1"
-    val_dataset: "LOLv1"
+    train_dataset: "LOLv2"
+    val_dataset: "LOLv2"
     patch_size: 256
     channels: 3
     num_workers: 4
