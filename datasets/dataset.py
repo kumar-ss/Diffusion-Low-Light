@@ -3,7 +3,6 @@ import torch
 import torch.utils.data
 import PIL
 from PIL import Image
-import re
 from datasets.data_augment import PairCompose, PairRandomCrop, PairToTensor
 
 class LLdataset:
@@ -13,11 +12,11 @@ class LLdataset:
     def get_loaders(self):
         # Get train and test datasets directly from the directory (using 'Test' for validation)
         train_dataset = AllWeatherDataset(
-            os.path.join(self.config.data.data_dir, self.config.data.train_dataset, 'train'),
+            os.path.join(self.config.data.data_dir, self.config.data.train_dataset, 'Train'),
             patch_size=self.config.data.patch_size
         )
         test_dataset = AllWeatherDataset(
-            os.path.join(self.config.data.data_dir, self.config.data.val_dataset, 'test'),  # Changed from 'val' to 'test'
+            os.path.join(self.config.data.data_dir, self.config.data.val_dataset, 'Test'),  # Changed from 'val' to 'test'
             patch_size=self.config.data.patch_size,
             train=False
         )
@@ -38,6 +37,7 @@ class LLdataset:
         )
 
         return train_loader, test_loader
+
 
 class AllWeatherDataset(torch.utils.data.Dataset):
     def __init__(self, dir, patch_size, train=True):
@@ -73,13 +73,23 @@ class AllWeatherDataset(torch.utils.data.Dataset):
         input_name = self.input_names[index]
         gt_name = self.gt_names[index]
 
+        # Load the input image (Low image)
         input_img = Image.open(os.path.join(self.dir, input_name))
-        gt_img = Image.open(os.path.join(self.dir, gt_name))
+
+        # Check if the ground truth image exists
+        gt_path = os.path.join(self.dir, gt_name)
+        if not os.path.exists(gt_path):
+            print(f"Warning: Ground truth image '{gt_name}' not found. Using input image as ground truth.")
+            gt_img = input_img  # Use the input image as the ground truth
+        else:
+            # Load the ground truth image (Normal image)
+            gt_img = Image.open(gt_path)
 
         # Apply transformations to both images
         input_img, gt_img = self.transforms(input_img, gt_img)
 
-        return torch.cat([input_img, gt_img], dim=0), input_name  # Concatenate input and ground truth images
+        # Concatenate input and ground truth images
+        return torch.cat([input_img, gt_img], dim=0), input_name
 
     def __getitem__(self, index):
         return self.get_images(index)
